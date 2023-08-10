@@ -26,6 +26,8 @@ streamlit.text(fruityvice_response.json())
 fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
 # display the data on screen as table
 streamlit.dataframe(fruityvice_normalized)
+#dont run anything post this
+streamlit.stop()
 import snowflake.connector
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
