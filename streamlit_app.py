@@ -36,15 +36,23 @@ except URLerror as e:
   streamlit.error()
 
 #dont run anything post this
-streamlit.stop()
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("select * from fruit_load_list")
-my_data_rows = my_cur.fetchall()
-streamlit.header("Fruit Load list contains")
-streamlit.dataframe(my_data_rows)
+
+streamlit.header("The fruit load list contains:")
+#snowflake related functions
+def get fruit_load_list():
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("select * from fruit_load_list")
+    return my_cur.fetchall()
+
+#add a button to load the fruit 
+if streamlit.button('Get fruit Load list'):
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = fruit_load_list();
+  streamlit.dataframe(my_data_rows)
+#streamlit.header("Fruit Load list contains")
+
 add_my_fruit = streamlit.text_input('What fruit would you like to add?')
 streamlit.write('Thanks for adding  ', add_my_fruit)
-
+streamlit.stop()
 ##this will not work
 my_cur.execute("insert into fruit_load_list values ('from streamlit')")
